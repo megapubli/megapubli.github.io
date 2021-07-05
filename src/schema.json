@@ -1,0 +1,18 @@
+{
+"@context" : "http://schema.org",
+"@type" : "Organização",
+"name" : "Mega Mult Outlet",
+"url" : "https://www.megamult.com.br",
+"sameAs" : [
+"https://www.facebook.com/megamult",
+"https://wa.me/551142415241"
+"https://www.instagram.com/megamultoutlet/?hl=pt-br"
+],
+"address": {
+"@type": "PostalAddress",
+"streetAddress": "Avenida Elias Yazbek 1607",
+"addressRegion": "Embu Das Artes",
+"postalCode": "06803-002",
+"addressCountry": "BR"
+}
+}
