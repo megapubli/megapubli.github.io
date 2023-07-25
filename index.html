@@ -1,1 +1,29 @@
-teste
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Exemplo Socket.IO</title>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.1/socket.io.js"></script>
+  <script>
+    // Conectar ao servidor Socket.IO
+    const socket = io("http://192.169.0.3:8080");
+
+    socket.on("connect", () => {
+      socket.emit('adduserB', '192.168.0.3') // true
+
+
+    });
+    socket.on("disconnect", () => {
+      socket.emit('removeuserB', '192.168.0.3')
+    });
+
+  </script>
+</head>
+
+<body>
+  <h1>Exemplo Socket.IO</h1>
+  <div id="users"></div>
+</body>
+
+</html>
