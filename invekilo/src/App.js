@@ -1,5 +1,6 @@
-import logo from './logo.svg';
 import React, { useEffect, useState } from 'react';
+import logo from './logo.svg';
+
 import InputMask from 'react-input-mask';
 import './App.css';
 
@@ -10,14 +11,28 @@ function App() {
   const [page, setPage] = useState("home");
   setInterval(() => {
     var caminho = window.location.hash;
-    setPage(caminho.replace('#!/', ''))
+    if (caminho == '') {
+      setPage('home')
+    } else {
+      setPage(caminho.replace('#!/', ''))
+    }
+
   }, 500)
-  window.location.href = "#!/home"
-  return (<div>
-    {page == 'home' ? (<Homescreen />) : null}
-    {page == 'teste' ? (<Teste />) : null}
-  </div>
-  )
+
+
+
+  switch (page) {
+    case 'home':
+      return (<Homescreen />)
+      break;
+    case 'teste':
+      return (<Teste />)
+      break;
+    default:
+      return (<Homescreen />)
+      break;
+  }
+
 
 }
 
@@ -47,18 +62,38 @@ function Teste() {
   );
 }
 function Homescreen() {
-  const[ status, setStatus] = useState('primary')
+  const [status, setStatus] = useState('primary');
+  const [value, setValue] = useState('');
+  const [button, setButton] = useState('Conectar ao Servidor');
   return (
     <div className="base">
       <div className="basedois">
-        <Inputserver id='server' style={{ width:'100%'}} placeholder="192.168.0.1"/><br/><br/>
-        <button style={{ width:'100%'}} class={'btn btn-lg  btn-'+status} onClick={() => {
-          setInterval(()=>{ setStatus('success')
-        
-          setInterval(()=>{window.location.href = "#!/teste"}, 1000)
-        }, 2000)
+        <InputMask mask="999.999.9.9" maskChar=" " id='server' style={{ width: '100%' }} placeholder="192.168.0.1" /><br /><br />
+        <button style={{ width: '100%' }} class={'btn btn-lg  btn-' + status} onClick={() => {
+          
+          setValue(document.getElementById('server').value)
+          fetch(`http://${document.getElementById('server').value}:8080/`)
+            .then(js => js.json())
+            .then((res) => {
+              if (res["active_server"] == true) {
+                setButton('Conectado com Sucesso')
+                setStatus('success')
+                setInterval(()=>{
+                  
+                  window.location.href = "#!/teste";
+                }, 1500)
+              }
+            })
+            .catch(err => {
+              console.log(JSON.stringify(err))
+              setButton('Falha: Tente Novamente')
+                setStatus('warning')
+
+            })
           //window.location.href = "#!/teste";
-        }}> teste</button>
+        }}>{button}</button>
+        <hr />
+        {value}
       </div>
 
     </div>
