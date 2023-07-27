@@ -48,7 +48,7 @@ Quagga.init({
 
 // Evento para quando um código é detectado
 Quagga.onDetected(function (result) {
-  console.log("Código de barras detectado:", result.codeResult.code);
+alert("Código de barras detectado:" + result.codeResult.code);
   // Você pode fazer o que quiser com o resultado aqui, por exemplo, armazená-lo em uma base de dados.
 });
 });
