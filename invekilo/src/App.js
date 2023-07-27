@@ -25,7 +25,7 @@ function App() {
     case 'home':
       return (<Homescreen />)
       break;
-    case 'teste':
+    case 'scan':
       return (<Teste />)
       break;
     default:
@@ -42,22 +42,40 @@ class Inputserver extends React.Component {
   }
 }
 function Teste() {
+  document.addEventListener("DOMContentLoaded", function () {
+
+
+    // Configuração do QuaggaJS
+    Quagga.init({
+      inputStream: {
+        name: "Live",
+        type: "LiveStream",
+        target: document.querySelector("#interactive"),
+        constraints: {
+          facingMode: "environment" // Use "user" para câmera frontal
+        },
+      },
+      decoder: {
+        readers: ["ean_reader"] // Leitor para códigos de barras EAN
+      },
+    }, function (err) {
+      if (err) {
+        console.error("Erro ao iniciar o Quagga:", err);
+        return;
+      }
+      console.log("Quagga iniciado com sucesso!");
+      Quagga.start();
+    });
+
+    // Evento para quando um código é detectado
+    Quagga.onDetected(function (result) {
+      console.log("Código de barras detectado:", result.codeResult.code);
+      // Você pode fazer o que quiser com o resultado aqui, por exemplo, armazená-lo em uma base de dados.
+    });
+  });
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div id="interactive" style={{width: 640, height: 480}}></div>
     </div>
   );
 }
@@ -65,31 +83,33 @@ function Homescreen() {
   const [status, setStatus] = useState('primary');
   const [value, setValue] = useState('');
   const [button, setButton] = useState('Conectar ao Servidor');
+
+  function setUser(res, callback) {
+    window.localStorage.setItem('User', res);
+    callback(true);
+  }
   return (
     <div className="base">
       <div className="basedois">
-        <InputMask mask="999.999.9.9" maskChar=" " id='server' style={{ width: '100%' }} placeholder="192.168.0.1" /><br /><br />
-        <button style={{ width: '100%' }} class={'btn btn-lg  btn-' + status} onClick={() => {
-          
-          setValue(document.getElementById('server').value)
-          fetch(`http://${document.getElementById('server').value}:8080/`)
-            .then(js => js.json())
-            .then((res) => {
-              if (res["active_server"] == true) {
-                setButton('Conectado com Sucesso')
-                setStatus('success')
-                setInterval(()=>{
-                  
-                  window.location.href = "#!/teste";
-                }, 1500)
-              }
-            })
-            .catch(err => {
-              console.log(JSON.stringify(err))
-              setButton('Falha: Tente Novamente')
-                setStatus('warning')
+        <input type='number' id='server' style={{ width: '100%' }} placeholder="Digite o Numero solicitado" />
 
-            })
+        <br /><br />
+        <button style={{ width: '100%' }} class={'btn btn-lg  btn-' + status} onClick={() => {
+
+          setValue(document.getElementById('server').value)
+
+          setUser(document.getElementById('server').value, (res) => {
+
+
+            setButton('Conectado com Sucesso')
+            setStatus('success')
+            setInterval(() => {
+
+              window.location.href = "#!/scan";
+            }, 1500)
+
+          })
+
           //window.location.href = "#!/teste";
         }}>{button}</button>
         <hr />

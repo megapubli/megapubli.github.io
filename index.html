@@ -1,1 +1,61 @@
-<!doctype html><html lang="pt-BR"><head><meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"><meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Invekilo"/><link rel="apple-touch-icon" href="/logo192.png"/><link rel="manifest" href="/manifest.json"/><title>Invekilo</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous"><script defer="defer" src="/static/js/main.2b3f3b9d.js"></script><link href="/static/css/main.c197cea1.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+        <meta charset="utf-8">
+        <link rel="icon" href="/favicon.ico">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta name="theme-color" content="#000000">
+        <meta name="description" content="Invekilo">
+        <link rel="apple-touch-icon" href="/logo192.png">
+        <link rel="manifest" href="/manifest.json">
+        <title>Invekilo</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+            crossorigin="anonymous"
+        >
+        <!--<script defer="defer" src="/static/js/main.2b3f3b9d.js"></script>
+        <link href="/static/css/main.c197cea1.css" rel="stylesheet"> -->
+        <script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+// Configuração do QuaggaJS
+Quagga.init({
+  inputStream: {
+    name: "Live",
+    type: "LiveStream",
+    target: document.querySelector("#interactive"),
+    constraints: {
+      facingMode: "environment" // Use "user" para câmera frontal
+    },
+  },
+  decoder: {
+    readers: ["ean_reader"] // Leitor para códigos de barras EAN
+  },
+}, function (err) {
+  if (err) {
+    console.error("Erro ao iniciar o Quagga:", err);
+    return;
+  }
+  console.log("Quagga iniciado com sucesso!");
+  Quagga.start();
+});
+
+// Evento para quando um código é detectado
+Quagga.onDetected(function (result) {
+  console.log("Código de barras detectado:", result.codeResult.code);
+  // Você pode fazer o que quiser com o resultado aqui, por exemplo, armazená-lo em uma base de dados.
+});
+});
+        </script>
+    </head>
+    <body>
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+        <div id="root"></div>
+        <div id="interactive" style='width: 640px; height: 480px;'></div>
+    </body>
+</html>
